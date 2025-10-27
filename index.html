@@ -8,83 +8,108 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap');
+        
+        html, body {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
         body {
             font-family: 'Inter', sans-serif;
             overflow: hidden; /* Hide scrollbars */
+            position: relative; /* Needed for slide positioning */
         }
+        
         .slide {
-            width: 100vw;
-            height: 100vh;
+            width: 100%;
+            height: 100%;
             /* A gradient for the background */
             background: radial-gradient(circle, rgba(23,37,84,1) 0%, rgba(17,24,39,1) 100%);
             display: none; /* Hidden by default */
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 4rem;
+            padding: 2rem; /* Reduced base padding for mobile */
             color: white;
             box-sizing: border-box;
             transition: opacity 0.5s ease-in-out;
             position: absolute;
             top: 0;
             left: 0;
+            overflow-y: auto; /* Allow scrolling on small screens if content overflows */
         }
+        
         .slide.active {
             display: flex; /* Show active slide */
             opacity: 1;
             z-index: 10;
         }
+        
         .slide-content {
             max-width: 1000px;
             width: 100%;
+            padding: 1rem; /* Added padding for content spacing */
         }
+
+        /* Responsive Typography */
         h1 {
-            font-size: 3.5rem;
+            font-size: 2.5rem; /* Mobile first font size */
             font-weight: 800;
             color: #67e8f9; /* Cyan */
+            text-align: center;
         }
+        
         h2 {
-            font-size: 1.5rem;
+            font-size: 1.25rem; /* Mobile first font size */
             font-weight: 500;
             color: #cbd5e1; /* Slate 300 */
             margin-top: 0.5rem;
+            text-align: center;
         }
+        
         .slide h3 {
-            font-size: 2.5rem;
+            font-size: 1.75rem; /* Mobile first font size */
             font-weight: 700;
             color: #67e8f9; /* Cyan */
-            margin-bottom: 2.5rem;
+            margin-bottom: 1.5rem;
             text-align: left;
             width: 100%;
             border-bottom: 2px solid #334155;
             padding-bottom: 0.5rem;
         }
+        
         .slide ul {
             list-style-type: none;
             padding-left: 0;
             width: 100%;
         }
+        
         .slide li {
-            font-size: 1.25rem;
+            font-size: 1rem; /* Mobile first font size */
             color: #e2e8f0; /* Slate 200 */
             margin-bottom: 1.25rem;
             display: flex;
             align-items: start;
             line-height: 1.6;
         }
+        
         .slide li svg {
             flex-shrink: 0;
-            width: 1.5rem;
-            height: 1.5rem;
-            margin-right: 1rem;
+            width: 1.25rem;
+            height: 1.25rem;
+            margin-right: 0.75rem;
             margin-top: 0.25rem;
             color: #67e8f9; /* Cyan */
         }
+        
         .slide li strong {
             color: #94a3b8; /* Slate 400 */
             font-weight: 600;
             margin-right: 0.5rem;
         }
+        
         /* Sub-list for features */
         .slide li ul {
             list-style-type: disc;
@@ -92,28 +117,30 @@
             margin-top: 0.5rem;
             width: auto;
         }
+        
         .slide li li {
-            font-size: 1.1rem;
+            font-size: 1rem; /* Adjusted for mobile */
             margin-bottom: 0.5rem;
             color: #cbd5e1; /* Slate 300 */
         }
+        
          .slide li li::before {
-            content: '-';
-            display: inline-block;
-            color: #67e8f9;
-            margin-right: 0.75rem;
-            font-weight: bold;
+           content: '-';
+           display: inline-block;
+           color: #67e8f9;
+           margin-right: 0.75rem;
+           font-weight: bold;
          }
 
         /* Navigation */
         .nav-button {
             position: fixed;
             z-index: 20;
-            bottom: 2rem;
+            bottom: 1rem; /* Adjusted for mobile */
             background-color: rgba(255, 255, 255, 0.1);
             border: 1px solid rgba(255, 255, 255, 0.2);
             color: white;
-            padding: 0.75rem 1.5rem;
+            padding: 0.5rem 1rem; /* Smaller padding for mobile */
             border-radius: 9999px; /* pill shape */
             cursor: pointer;
             font-weight: 500;
@@ -121,71 +148,219 @@
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
         }
+        
         .nav-button:hover {
             background-color: rgba(255, 255, 255, 0.2);
         }
+        
         #prev {
-            left: 2rem;
+            left: 1rem; /* Adjusted for mobile */
         }
+        
         #next {
-            right: 2rem;
+            right: 1rem; /* Adjusted for mobile */
         }
+        
         .slide-counter {
             position: fixed;
             z-index: 20;
-            bottom: 2.5rem;
+            bottom: 1.5rem; /* Adjusted for mobile */
             left: 50%;
             transform: translateX(-50%);
             color: #94a3b8; /* Slate 400 */
-            font-size: 0.875rem;
+            font-size: 0.75rem; /* Smaller for mobile */
             background-color: rgba(0, 0, 0, 0.2);
             padding: 0.25rem 0.75rem;
             border-radius: 1rem;
         }
+        
         /* Icon styles */
         .icon-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 2rem;
+            grid-template-columns: 1fr; /* Single column for mobile */
+            gap: 1rem; /* Reduced gap for mobile */
             width: 100%;
-            margin-top: 2rem;
+            margin-top: 1.5rem;
         }
+        
         .icon-item {
             display: flex;
             flex-direction: column;
             align-items: center;
             text-align: center;
             background-color: rgba(0, 0, 0, 0.15);
-            padding: 1.5rem;
+            padding: 1rem; /* Reduced padding */
             border-radius: 0.75rem;
             border: 1px solid #334155;
         }
+        
         .icon-item svg {
-            width: 3rem;
-            height: 3rem;
+            width: 2.5rem; /* Smaller icon */
+            height: 2.5rem;
             color: #67e8f9;
-            margin-bottom: 1rem;
+            margin-bottom: 0.75rem;
         }
+        
         .icon-item h4 {
             font-size: 1.125rem;
             font-weight: 600;
             color: white;
             margin-bottom: 0.25rem;
         }
+        
         .icon-item p {
             font-size: 0.875rem;
             color: #cbd5e1;
             line-height: 1.4;
         }
+
+        /* How it works slide */
+        .slide ol {
+            font-size: 1rem;
+            margin-top: 1.5rem;
+        }
+         .slide ol li {
+            font-size: 1rem; /* Responsive font size */
+            margin-bottom: 1rem;
+         }
+         .slide ol li strong.text-3xl {
+            font-size: 1.75rem; /* Smaller number */
+            line-height: 1.6;
+            margin-right: 1rem;
+         }
+         .slide ol li strong:not(.text-3xl) {
+             font-weight: 600;
+             color: #e2e8f0;
+         }
+
+        /* Tablet and larger screens (md breakpoint) */
+        @media (min-width: 768px) {
+            .slide {
+                padding: 4rem;
+                overflow-y: hidden; /* Hide overflow on larger screens */
+            }
+
+            .slide-content {
+                 padding: 0; /* Reset padding */
+            }
+
+            h1 {
+                font-size: 3.5rem;
+            }
+            
+            h2 {
+                font-size: 1.5rem;
+            }
+
+            .slide h3 {
+                font-size: 2.5rem;
+                margin-bottom: 2.5rem;
+            }
+
+            .slide li {
+                font-size: 1.25rem;
+            }
+
+            .slide li svg {
+                width: 1.5rem;
+                height: 1.5rem;
+                margin-right: 1rem;
+            }
+
+            .slide li li {
+                font-size: 1.1rem;
+            }
+
+            .nav-button {
+                bottom: 2rem;
+                padding: 0.75rem 1.5rem;
+            }
+
+            #prev {
+                left: 2rem;
+            }
+
+            #next {
+                right: 2rem;
+            }
+
+            .slide-counter {
+                bottom: 2.5rem;
+                font-size: 0.875rem;
+            }
+
+            .icon-grid {
+                 /* 2 columns on tablets */
+                grid-template-columns: repeat(2, 1fr);
+                gap: 2rem;
+                margin-top: 2rem;
+            }
+
+            .icon-item {
+                padding: 1.5rem;
+            }
+
+            .icon-item svg {
+                width: 3rem;
+                height: 3rem;
+                margin-bottom: 1rem;
+            }
+
+            .slide ol li {
+                font-size: 1.125rem; /* Slightly larger on desktop */
+                margin-bottom: 1.5rem;
+            }
+             .slide ol li strong.text-3xl {
+                font-size: 2.5rem; /* Larger number */
+             }
+        }
+
+        /* Large desktops (lg breakpoint) */
+        @media (min-width: 1024px) {
+            h1 {
+                font-size: 3.5rem; /* Original size */
+            }
+
+            h2 {
+                font-size: 1.5rem; /* Original size */
+            }
+
+            /* On slide 1, target the h2 specifically */
+            .slide:first-child h2 {
+                font-size: 2.25rem; /* 3xl */
+            }
+            .slide:first-child p {
+                font-size: 1.25rem; /* xl */
+            }
+
+             .slide:nth-child(11) h2 { /* Thank you slide */
+                font-size: 2.25rem; /* 3xl */
+            }
+
+            .icon-grid {
+                /* Back to auto-fit for larger screens */
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            }
+
+             .slide ol li {
+                font-size: 1.25rem; /* xl */
+            }
+             .slide ol li strong.text-3xl {
+                font-size: 1.875rem; /* 3xl */
+             }
+        }
+
     </style>
 </head>
 <body class="bg-gray-900">
 
     <!-- Slide 1: Title -->
-    <div class="slide active" style="text-align: center;">
-        <h1 class="text-6xl">MediScan AI</h1>
-        <h2 class="text-3xl mt-4 max-w-3xl">Early Parkinson's Screening Through Speech & Handwriting</h2>
-        <p class="text-xl text-slate-400 mt-12">[Your Name(s) Here]</p>
+    <div class="slide active">
+        <div class="slide-content text-center">
+            <h1>MediScan AI</h1>
+            <h2 class="mt-4 max-w-3xl">Early Parkinson's Screening Through Speech & Handwriting</h2>
+            <p class="text-slate-400 mt-12">[Your Name(s) Here]</p>
+        </div>
     </div>
 
     <!-- Slide 2: The Problem -->
@@ -417,7 +592,7 @@
     <div class="slide">
         <div class="slide-content">
             <h3>How It Works (The User's Journey)</h3>
-            <ol class="list-decimal list-inside text-xl space-y-4 text-slate-200">
+            <ol class="list-inside space-y-4 text-slate-200">
                 <li class="flex items-start"><strong class="text-3xl text-cyan-400 mr-4">1.</strong> <strong>Register & Login:</strong> Patient or doctor creates a secure account.</li>
                 <li class="flex items-start"><strong class="text-3xl text-cyan-400 mr-4">2.</strong> <strong>Upload Samples:</strong> Patient uploads a voice recording and a handwriting sample.</li>
                 <li class="flex items-start"><strong class="text-3xl text-cyan-400 mr-4">3.</strong> <strong>AI Analysis:</strong> Our Flask backend processes the files. Librosa & OpenCV extract key features. The AI models predict the risk of PD.</li>
@@ -488,9 +663,11 @@
     </div>
 
     <!-- Slide 11: Thank You -->
-    <div class="slide" style="text-align: center;">
-        <h1 class="text-6xl">Thank You</h1>
-        <h2 class="text-3xl mt-4">Questions?</h2>
+    <div class="slide">
+        <div class="slide-content text-center">
+            <h1>Thank You</h1>
+            <h2 class="mt-4">Questions?</h2>
+        </div>
     </div>
 
     <!-- Navigation -->
@@ -554,10 +731,42 @@
                     }
                 } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
                      if (currentSlide > 0) {
-                        prevSlide();
+                         prevSlide();
                     }
                 }
             });
+            
+            // --- Touch/Swipe Controls for Mobile ---
+            let touchstartX = 0;
+            let touchendX = 0;
+            const touchSurface = document.body;
+
+            touchSurface.addEventListener('touchstart', (e) => {
+                touchstartX = e.changedTouches[0].screenX;
+            }, { passive: true });
+
+            touchSurface.addEventListener('touchend', (e) => {
+                touchendX = e.changedTouches[0].screenX;
+                handleSwipe();
+            }, { passive: true });
+
+            function handleSwipe() {
+                const swipeThreshold = 50; // Minimum distance for a swipe
+                if (touchendX < touchstartX - swipeThreshold) {
+                    // Swiped left
+                    if (currentSlide < totalSlides - 1) {
+                        nextSlide();
+                    }
+                }
+                
+                if (touchendX > touchstartX + swipeThreshold) {
+                    // Swiped right
+                   if (currentSlide > 0) {
+                        prevSlide();
+                   }
+                }
+            }
+            // --- End Touch Controls ---
 
             // Initial setup
             showSlide(0);
@@ -566,4 +775,3 @@
 
 </body>
 </html>
-
